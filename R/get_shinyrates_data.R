@@ -126,9 +126,57 @@ format_shinyrates_data <- function(df, timestamp){
   return(result)
 }
 
+
+
+#' Write the shinyrates data.
+#'
+#' @description writes the data from shinyrates.com
+#'
+#' @param df: a data frame to write
+#' @param name: the name of the file (with file type ie name.csv)
+#'
+#'
+#' @examples
+#' date <- Sys.Date()
+#' df <- scrape_shinyrates_website()
+#' df <- format_shinyrates_data(df=df, timestamp=date)
+#' write_shinyrates_data(df)
+#'
 write_shinyrates_data <- function(df, name="shinyrates.csv" ){
 
-  write.csv(df, name)
+  readr::write_csv(df,  here::here("data",name))
 
 }
+
+#' Updates the shinyrates data
+#'
+#' @description Updates the data from shinyrates.com
+#'
+#' @param df: a data frame to write
+#' @param old_file: filepath to the old version of the shinyrates data (defaults to github)ro
+#'
+#'
+#' @examples
+#' date <- Sys.Date()
+#' df <- scrape_shinyrates_website()
+#' df <- format_shinyrates_data(df=df, timestamp=date)
+#' newdf <- write_shinyrates_data(df)
+#' update_shinyrates_data(newdf)
+update_shinyrates_data <- function(
+  df,
+  old_file ="https://raw.githubusercontent.com/delabj/pogoshinyrates/master/data/shinyrates.csv"){
+  new_data <- df
+  previous <- readr::read_csv(old_file)
+
+  names_previous <- names(previous)
+  names_new <- names(new_data)
+
+  stopifnot(names_previous==names_new)
+
+  combined <- rbind(previous, new_data)
+
+  write_shinyrates_data(combined, here::here("data", "shinyrates.csv"))
+}
+
+
 
