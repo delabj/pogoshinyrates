@@ -110,7 +110,7 @@ format_shinyrates_data <- function(df, timestamp){
     ) %>%
     dplyr::mutate(
       numerator = sub(",", "", numerator),
-      denominator=sub(",", "", numerator),
+      denominator=sub(",", "", denominator),
       shiny_rate = as.numeric(numerator)/as.numeric(denominator),
       date_recorded = timestamp
     ) %>%
