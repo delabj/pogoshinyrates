@@ -3,4 +3,5 @@
 export(format_shinyrates_data)
 export(get_shinyrates_data)
 export(scrape_shinyrates_website)
+export(update_shinyrates_data)
 importFrom(dplyr,"%>%")

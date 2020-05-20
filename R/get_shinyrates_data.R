@@ -175,7 +175,7 @@ update_shinyrates_data <- function(
 
   combined <- rbind(previous, new_data)
 
-  write_shinyrates_data(combined, here::here("data", "shinyrates.csv"))
+  pogoshinyrates:::write_shinyrates_data(combined, here::here("data", "shinyrates.csv"))
 }
 
 

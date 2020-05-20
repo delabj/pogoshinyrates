@@ -13,7 +13,7 @@ update_shinyrates_data(
 \arguments{
 \item{df:}{a data frame to write}
 
-\item{old_file:}{filepath to the old version of the shinyrates data (defaults to github)}
+\item{old_file:}{filepath to the old version of the shinyrates data (defaults to github)ro}
 }
 \description{
 Updates the data from shinyrates.com
