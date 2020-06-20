@@ -64,10 +64,10 @@ get_shinyrates_data <- function(
 #' @importFrom dplyr %>%
 scrape_shinyrates_website <- function(page){
   # Read in as a list
-  rates_list <-  rjson::fromJSON(readLines(page,warn=FALSE))
+  rates_list <-  rjson::fromJSON(readLines(page,warn=FALSE, ))
 
   #convert to a data.frame
-  rates_df <- data.frame(matrix(unlist(rates_list), nrow=length(rates_list), byrow=TRUE))
+  rates_df <- data.frame(matrix(unlist(rates_list), nrow=length(rates_list), byrow=TRUE), stringsAsFactors = FALSE)
 
   #set names
   names(rates_df) <- c("pokemon_ID", "pokemon_name", "shiny_rate_frac", "sample_size")
@@ -102,19 +102,24 @@ scrape_shinyrates_website <- function(page){
 format_shinyrates_data <- function(df, timestamp){
 
   result <- df %>%
-    tidyr::separate(
-      shiny_rate_frac,
-      into = c("numerator", "denominator"),
-      sep = "/",
-      remove =FALSE
-    ) %>%
+  tidyr::separate(
+    shiny_rate_frac,
+    into = c("numerator", "denominator"),
+    sep = "/",
+    remove =FALSE
+  ) %>%
     dplyr::mutate(
-      numerator = sub(",", "", numerator),
-      denominator=sub(",", "", denominator),
-      shiny_rate = as.numeric(numerator)/as.numeric(denominator),
+      numerator = gsub(",", "", numerator),
+      denominator= gsub(",", "", denominator)) %>%
+    dplyr::mutate(num_numerator = as.numeric(numerator),
+           num_denominator = as.numeric(denominator))%>%
+  dplyr::mutate(
+      shiny_rate = num_numerator/num_denominator,
       date_recorded = timestamp
     ) %>%
     dplyr::select(
+      num_numerator,
+      num_denominator,
       date_recorded,
       pokemon_ID,
       pokemon_name,
@@ -175,7 +180,7 @@ update_shinyrates_data <- function(
 
   combined <- rbind(previous, new_data)
 
-  write_shinyrates_data(combined, here::here("data", "shinyrates.csv"))
+  pogoshinyrates:::write_shinyrates_data(combined, here::here("data", "shinyrates.csv"))
 }
 
 
