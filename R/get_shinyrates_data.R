@@ -24,7 +24,7 @@ get_shinyrates_data <- function(
 
   # get the date
   suppressMessages(
-    now <- timestamp(
+    now <- utils::timestamp(
     stamp = Sys.Date(),
     prefix = "",
     suffix = ""
